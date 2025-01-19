@@ -1,0 +1,12 @@
+# 忽略 Python 字节码文件
+__pycache__/
+*.pyc
+
+# 忽略虚拟环境目录
+venv/
+
+# 忽略 IDE 配置文件（如 PyCharm）
+.idea/
+
+# 忽略其他不必要的文件
+*.log
