@@ -1,11 +1,12 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker,declarative_base
+import os
 
 # 数据库连接字符串（请根据你的数据库配置修改这里）
 driver = "mysql+mysqlconnector"
 username = "root"
 password = "MEIlong750712!"
-host =  "localhost"
+host = os.getenv("DB_HOST", "localhost")
 port ="3306"
 database_name = "doc_review_rag"
 DATABASE_URL = driver+"://" + username + ":" + password +  "@" + host + ":" + port +"/" + database_name
