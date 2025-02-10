@@ -1,33 +1,19 @@
 from flask import Flask, jsonify,Blueprint
-import mysql.connector
-import os
+from module.db_init import *
+from module.db_table import Document
 
 #渲染用的端口的蓝图
 r = Blueprint('render', __name__)
 #查找documents表中的id和subject
 @r.route('/subjects', methods=['GET'])
 def get_subjects():
-    db_host = os.getenv('DB_HOST', 'localhost')  # 默认值为localhost
-    db_user = os.getenv('DB_USER', 'root')
-    db_password = os.getenv('DB_PASSWORD', 'MEIlong750712!')
-    db_name = os.getenv('DB_NAME', 'doc_review_rag')
-    db = mysql.connector.connect(
-        host=db_host,
-        user=db_user,
-        password=db_password,
-        database=db_name
-    )
-    cursor = db.cursor()
 
+    with get_db() as db:  # 使用上下文管理器
+        # ORM 查询数据
+        documents = db.query(Document.id, Document.subject).all()
 
+        # 转换为字典格式
+        subjects = [{'id': doc.id, 'subject_name': doc.subject} for doc in documents]
 
-    cursor.execute("SELECT id,subject FROM documents")
-    rows = cursor.fetchall()
-
-    cursor.close()
-    db.close()
-
-    #将查询结果转换为字典模式
-    subjects = [{'id': row[0], 'subject_name': row[1]} for row in rows]
     return jsonify(subjects)  # 返回数据
 
